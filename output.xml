@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.2.2 (Python 3.12.5 on win32)" generated="2025-05-22T16:40:49.796525" rpa="false" schemaversion="5">
+<suite id="s1" name="Test Pet" source="c:\Iterasys\PetStoreRobot140\__tests__\test_pet.robot">
+<test id="s1-t1" name="Post pet" line="20">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-05-22T16:40:50.076721" level="INFO">${body} = {'id': '702190001', 'category': {'id': '1', 'name': 'cachorro'}, 'name': 'Snoopy', 'photoUrls': [], 'tags': [{'id': '1', 'name': 'vacinado'}], 'status': ''}</msg>
+<var>${body}</var>
+<arg>id=${id}</arg>
+<arg>category=${category}</arg>
+<arg>name=${name}</arg>
+<arg>photoUrls=${photoUrls}</arg>
+<arg>tags=${tags}</arg>
+<arg>status=${status}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-05-22T16:40:50.076721" elapsed="0.003386"/>
+</kw>
+<kw name="POST" owner="RequestsLibrary">
+<msg time="2025-05-22T16:40:50.084116" level="FAIL">OSError: Could not find a suitable TLS CA certificate bundle, invalid path: False # o verify=false é necessário em caso de ambiente corporativo / ssl bloqueado</msg>
+<var>${response}</var>
+<arg>url=${url}</arg>
+<arg>json=${body}</arg>
+<arg>verify=${False} # o verify=false é necessário em caso de ambiente corporativo / ssl bloqueado</arg>
+<doc>Sends a POST request.</doc>
+<status status="FAIL" start="2025-05-22T16:40:50.082111" elapsed="0.004009">OSError: Could not find a suitable TLS CA certificate bundle, invalid path: False # o verify=false é necessário em caso de ambiente corporativo / ssl bloqueado</status>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<var>${response_body}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="NOT RUN" start="2025-05-22T16:40:50.086120" elapsed="0.000000"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>${response_body}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="NOT RUN" start="2025-05-22T16:40:50.086120" elapsed="0.000000"/>
+</kw>
+<kw name="Status Should Be" owner="RequestsLibrary">
+<arg>200</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="NOT RUN" start="2025-05-22T16:40:50.086120" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${response_body}[id]</arg>
+<arg>${{int($id)}}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="NOT RUN" start="2025-05-22T16:40:50.086120" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${response_body}[name]</arg>
+<arg>${name}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="NOT RUN" start="2025-05-22T16:40:50.086120" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${response_body}[tags][0][id]</arg>
+<arg>${{int(${tag}[id])}}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="NOT RUN" start="2025-05-22T16:40:50.086120" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${response_body}[tags][0][name]</arg>
+<arg>${tag}[name]</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="NOT RUN" start="2025-05-22T16:40:50.086120" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${response_body}[status]</arg>
+<arg>${status}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="NOT RUN" start="2025-05-22T16:40:50.090977" elapsed="0.000000"/>
+</kw>
+<status status="FAIL" start="2025-05-22T16:40:50.076721" elapsed="0.014256">OSError: Could not find a suitable TLS CA certificate bundle, invalid path: False # o verify=false é necessário em caso de ambiente corporativo / ssl bloqueado</status>
+</test>
+<status status="FAIL" start="2025-05-22T16:40:49.799526" elapsed="0.293244"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Test Pet" id="s1" pass="0" fail="1" skip="0">Test Pet</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
