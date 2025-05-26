@@ -48,6 +48,8 @@ Get pet
     Status Should Be    200
     Should Be Equal    ${response_body}[id]    ${{int($id)}}
     Should Be Equal    ${response_body}[name]    ${name}
+                                                        # ${category}[id]
+                                                        # ${{int($category[id])}}
     Should Be Equal    ${response_body}[category][id]    ${{int($category[id])}}
     Should Be Equal    ${response_body}[category][name]    ${category}[name]
 
