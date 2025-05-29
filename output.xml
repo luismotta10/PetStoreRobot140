@@ -1,86 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.2.2 (Python 3.12.5 on win32)" generated="2025-05-22T16:40:49.796525" rpa="false" schemaversion="5">
+<robot generator="Robot 7.2.2 (Python 3.12.5 on win32)" generated="2025-05-29T11:06:11.366543" rpa="false" schemaversion="5">
 <suite id="s1" name="Test Pet" source="c:\Iterasys\PetStoreRobot140\__tests__\test_pet.robot">
-<test id="s1-t1" name="Post pet" line="20">
-<kw name="Create Dictionary" owner="BuiltIn">
-<msg time="2025-05-22T16:40:50.076721" level="INFO">${body} = {'id': '702190001', 'category': {'id': '1', 'name': 'cachorro'}, 'name': 'Snoopy', 'photoUrls': [], 'tags': [{'id': '1', 'name': 'vacinado'}], 'status': ''}</msg>
-<var>${body}</var>
-<arg>id=${id}</arg>
-<arg>category=${category}</arg>
-<arg>name=${name}</arg>
-<arg>photoUrls=${photoUrls}</arg>
-<arg>tags=${tags}</arg>
-<arg>status=${status}</arg>
-<doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<status status="PASS" start="2025-05-22T16:40:50.076721" elapsed="0.003386"/>
-</kw>
-<kw name="POST" owner="RequestsLibrary">
-<msg time="2025-05-22T16:40:50.084116" level="FAIL">OSError: Could not find a suitable TLS CA certificate bundle, invalid path: False # o verify=false é necessário em caso de ambiente corporativo / ssl bloqueado</msg>
+<test id="s1-t1" name="Delete pet" line="78">
+<kw name="DELETE" owner="RequestsLibrary">
+<msg time="2025-05-29T11:06:12.630018" level="INFO">DELETE Request : url=https://petstore.swagger.io/v2/pet/702190001 
+ path_url=/v2/pet/702190001 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2025-05-29T11:06:12.631523" level="INFO">DELETE Response : url=https://petstore.swagger.io/v2/pet/702190001 
+ status=200, reason=OK 
+ headers={'Date': 'Thu, 29 May 2025 14:06:12 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST, DELETE, PUT', 'Access-Control-Allow-Headers': 'Content-Type, api_key, Authorization', 'Server': 'Jetty(9.2.9.v20150224)'} 
+ body={"code":200,"type":"unknown","message":"702190001"} 
+ </msg>
+<msg time="2025-05-29T11:06:12.631523" level="INFO">c:\Iterasys\PetStoreRobot140\.venv\Lib\site-packages\urllib3\connectionpool.py:1097: InsecureRequestWarning: Unverified HTTPS request is being made to host 'petstore.swagger.io'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-05-29T11:06:12.631523" level="INFO">${response} = &lt;Response [200]&gt;</msg>
 <var>${response}</var>
-<arg>url=${url}</arg>
-<arg>json=${body}</arg>
-<arg>verify=${False} # o verify=false é necessário em caso de ambiente corporativo / ssl bloqueado</arg>
-<doc>Sends a POST request.</doc>
-<status status="FAIL" start="2025-05-22T16:40:50.082111" elapsed="0.004009">OSError: Could not find a suitable TLS CA certificate bundle, invalid path: False # o verify=false é necessário em caso de ambiente corporativo / ssl bloqueado</status>
+<arg>${{$url + '/' + $id}}</arg>
+<arg>verify=${False}</arg>
+<doc>Sends a DELETE request.</doc>
+<status status="PASS" start="2025-05-29T11:06:11.654417" elapsed="0.978111"/>
 </kw>
 <kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-05-29T11:06:12.632528" level="INFO">${response_body} = {'code': 200, 'type': 'unknown', 'message': '702190001'}</msg>
 <var>${response_body}</var>
 <arg>${response.json()}</arg>
 <doc>Returns the given values which can then be assigned to a variables.</doc>
-<status status="NOT RUN" start="2025-05-22T16:40:50.086120" elapsed="0.000000"/>
+<status status="PASS" start="2025-05-29T11:06:12.632528" elapsed="0.001005"/>
 </kw>
 <kw name="Log To Console" owner="BuiltIn">
 <arg>${response_body}</arg>
 <doc>Logs the given message to the console.</doc>
-<status status="NOT RUN" start="2025-05-22T16:40:50.086120" elapsed="0.000000"/>
+<status status="PASS" start="2025-05-29T11:06:12.633533" elapsed="0.000000"/>
 </kw>
 <kw name="Status Should Be" owner="RequestsLibrary">
 <arg>200</arg>
 <doc>Fails if response status code is different than the expected.</doc>
-<status status="NOT RUN" start="2025-05-22T16:40:50.086120" elapsed="0.000000"/>
+<status status="PASS" start="2025-05-29T11:06:12.634533" elapsed="0.000000"/>
 </kw>
 <kw name="Should Be Equal" owner="BuiltIn">
-<arg>${response_body}[id]</arg>
-<arg>${{int($id)}}</arg>
+<arg>${response_body}[code]</arg>
+<arg>${{int(200)}}</arg>
 <doc>Fails if the given objects are unequal.</doc>
-<status status="NOT RUN" start="2025-05-22T16:40:50.086120" elapsed="0.000000"/>
+<status status="PASS" start="2025-05-29T11:06:12.635533" elapsed="0.001001"/>
 </kw>
 <kw name="Should Be Equal" owner="BuiltIn">
-<arg>${response_body}[name]</arg>
-<arg>${name}</arg>
+<arg>${response_body}[type]</arg>
+<arg>unknown</arg>
 <doc>Fails if the given objects are unequal.</doc>
-<status status="NOT RUN" start="2025-05-22T16:40:50.086120" elapsed="0.000000"/>
+<status status="PASS" start="2025-05-29T11:06:12.636534" elapsed="0.000000"/>
 </kw>
 <kw name="Should Be Equal" owner="BuiltIn">
-<arg>${response_body}[tags][0][id]</arg>
-<arg>${{int(${tag}[id])}}</arg>
+<arg>${response_body}[message]</arg>
+<arg>${id}</arg>
 <doc>Fails if the given objects are unequal.</doc>
-<status status="NOT RUN" start="2025-05-22T16:40:50.086120" elapsed="0.000000"/>
+<status status="PASS" start="2025-05-29T11:06:12.637532" elapsed="0.000000"/>
 </kw>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${response_body}[tags][0][name]</arg>
-<arg>${tag}[name]</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="NOT RUN" start="2025-05-22T16:40:50.086120" elapsed="0.000000"/>
-</kw>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${response_body}[status]</arg>
-<arg>${status}</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="NOT RUN" start="2025-05-22T16:40:50.090977" elapsed="0.000000"/>
-</kw>
-<status status="FAIL" start="2025-05-22T16:40:50.076721" elapsed="0.014256">OSError: Could not find a suitable TLS CA certificate bundle, invalid path: False # o verify=false é necessário em caso de ambiente corporativo / ssl bloqueado</status>
+<status status="PASS" start="2025-05-29T11:06:11.654417" elapsed="0.983115"/>
 </test>
-<status status="FAIL" start="2025-05-22T16:40:49.799526" elapsed="0.293244"/>
+<status status="PASS" start="2025-05-29T11:06:11.369542" elapsed="1.268991"/>
 </suite>
 <statistics>
 <total>
-<stat pass="0" fail="1" skip="0">All Tests</stat>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
 </total>
 <tag>
 </tag>
 <suite>
-<stat name="Test Pet" id="s1" pass="0" fail="1" skip="0">Test Pet</stat>
+<stat name="Test Pet" id="s1" pass="1" fail="0" skip="0">Test Pet</stat>
 </suite>
 </statistics>
 <errors>

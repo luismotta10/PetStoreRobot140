@@ -12,7 +12,7 @@ ${name}    Snoopy
 @{photoUrls}                                  # @ sinaliza uma lista com vários registros - seria []
 &{tag}    id=1    name=vacinado
 @{tags}    ${tag}                             # fez uma lista de outra lista
-${status}    
+${status}    available
 
 *** Test Cases ***
 # Descritivo de Negócio + Passos de Automação
@@ -22,8 +22,8 @@ Post pet
     ${body}    Create Dictionary    id=${id}    category=${category}    name=${name}
     ...                             photoUrls=${photoUrls}    tags=${tags}    status=${status}   
         
-    # Executar
-    ${response}    POST    url=${url}    json=${body}    verify=${False} # o verify=false é necessário em caso de ambiente corporativo / ssl bloqueado
+    # Executar                                            # o verify=false é necessário em caso de ambiente corporativo / ssl bloqueado
+    ${response}    POST    url=${url}    json=${body}    verify=${False} 
 
     # Validar
     ${response_body}    Set Variable    ${response.json()}  # recebe o conteudo da outra variável
@@ -38,7 +38,7 @@ Post pet
 
 Get pet
     # executa
-    ${response}    GET    ${{$url + '/' + $id}}    verify=${False}
+    ${response}    GET    ${{$url + '/' + $id}}    verify=${False}      
     
 
     # valida
@@ -48,10 +48,45 @@ Get pet
     Status Should Be    200
     Should Be Equal    ${response_body}[id]    ${{int($id)}}
     Should Be Equal    ${response_body}[name]    ${name}
-                                                        # ${category}[id]
-                                                        # ${{int($category[id])}}
-    Should Be Equal    ${response_body}[category][id]    ${{int($category[id])}}
+                                                       # ${category}[id]
+                                                       # ${{int(${category}[id])}}
+    Should Be Equal    ${response_body}[category][id]    ${{int(${category}[id])}}
     Should Be Equal    ${response_body}[category][name]    ${category}[name]
+
+
+Put pet
+    # montar a mensagem / body com a mudança
+    ${body}    Evaluate    json.loads(open('./fixtures/json/pet2.json').read())    # json carrega abrindo o arquivo no caminho e depois ler
+
+    # executar
+    ${response}    PUT    url=${url}    json=${body}    verify=${False}
+
+    # valida
+    ${response_body}    Set Variable    ${response.json()}
+
+    Status Should Be    200
+    Should Be Equal    ${response_body}[id]                ${{int($id)}}
+    Should Be Equal    ${response_body}[category][id]      ${{int(${category}[id])}}
+    Should Be Equal    ${response_body}[category][name]    ${category}[name]
+    Should Be Equal    ${response_body}[name]              ${name}                                             
+    Should Be Equal    ${response_body}[tags][0][id]       ${{int(${tag}[id])}}
+    Should Be Equal    ${response_body}[tags][0][name]     ${tag}[name]    
+    Should Be Equal    ${response_body}[status]            sold        # valor fixo     
+    Should Be Equal    ${response_body}[status]            ${body}[status]    # compara o valor que está no arquivo
+
+
+Delete pet
+    #executa
+    ${response}    DELETE    ${{$url + '/' + $id}}    verify=${False}
+
+    # valida
+    ${response_body}    Set Variable    ${response.json()} 
+    Log To Console    ${response_body}        
+
+    Status Should Be    200
+    Should Be Equal    ${response_body}[code]        ${{int(200)}}
+    Should Be Equal    ${response_body}[type]        unknown
+    Should Be Equal    ${response_body}[message]     ${id}
 
 
 
