@@ -6,11 +6,11 @@ Library    RequestsLibrary
 # Objetos, Atributos e Variables
 ${url}    https://petstore.swagger.io/v2/pet         
 
-${id}    702190001                            # $ sinaliza uma variável simples
+${id}    702190001                            # $ sinaliza uma variável simples / apos as variaveis é utilizado tab
 ${name}    Snoopy                             
 &{category}    id=1    name=cachorro          # & sinaliza lista com campos determinados. Ex: id e name - seria {} 
 @{photoUrls}                                  # @ sinaliza uma lista com vários registros - seria []
-&{tag}    id=1    name=vacinado
+&{tag}     id=1    name=vacinado
 @{tags}    ${tag}                             # fez uma lista de outra lista
 ${status}    available
 
@@ -18,7 +18,7 @@ ${status}    available
 # Descritivo de Negócio + Passos de Automação
 
 Post pet
-    # montar a mensagem / body
+    # montar a mensagem / body /  essa é a estrutura do json
     ${body}    Create Dictionary    id=${id}    category=${category}    name=${name}
     ...                             photoUrls=${photoUrls}    tags=${tags}    status=${status}   
         
@@ -30,7 +30,7 @@ Post pet
     Log To Console    ${response_body}        # imprimir o retorno da API no terminal / console
 
     Status Should Be    200
-    Should Be Equal    ${response_body}[id]               ${{int($id)}}
+    Should Be Equal    ${response_body}[id]               ${{int($id)}}    # verifica se o campo id do corpo da resposta (${response_body}[id]) é igual ao valor de ${id}, convertido para inteiro.
     Should Be Equal    ${response_body}[name]             ${name}
     Should Be Equal    ${response_body}[tags][0][id]      ${{int(${tag}[id])}}
     Should Be Equal    ${response_body}[tags][0][name]    ${tag}[name]    
