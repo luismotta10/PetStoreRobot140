@@ -32,12 +32,14 @@ Post pet
     Status Should Be    200
     Should Be Equal    ${response_body}[id]               ${{int($id)}}    # verifica se o campo id do corpo da resposta (${response_body}[id]) é igual ao valor de ${id}, convertido para inteiro.
     Should Be Equal    ${response_body}[name]             ${name}
-    Should Be Equal    ${response_body}[tags][0][id]      ${{int(${tag}[id])}}
-    Should Be Equal    ${response_body}[tags][0][name]    ${tag}[name]    
+    # valida o id do primeiro registro em tags
+    # os campos zero [0] identifica a posição um do campo json / não colocar esse comentário na mesma linha pois da erro [FAIL INSIDE] 1 != 1'
+    Should Be Equal    ${response_body}[tags][0][id]      ${{int(${tag}[id])}} 
+    Should Be Equal    ${response_body}[tags][0][name]   ${tag}[name] 
     Should Be Equal    ${response_body}[status]           ${status}    
 
 Get pet
-    # executa
+    # executa             # url + id do animal
     ${response}    GET    ${{$url + '/' + $id}}    verify=${False}      
     
 
@@ -48,8 +50,8 @@ Get pet
     Status Should Be    200
     Should Be Equal    ${response_body}[id]    ${{int($id)}}
     Should Be Equal    ${response_body}[name]    ${name}
-                                                       # ${category}[id]
-                                                       # ${{int(${category}[id])}}
+                                                       # ${category}[id] se fosse só texto seria assim
+                                                       # ${{int(${category}[id])}} converte (int), 
     Should Be Equal    ${response_body}[category][id]    ${{int(${category}[id])}}
     Should Be Equal    ${response_body}[category][name]    ${category}[name]
 
@@ -63,6 +65,7 @@ Put pet
 
     # valida
     ${response_body}    Set Variable    ${response.json()}
+    Log To Console    ${response_body}
 
     Status Should Be    200
     Should Be Equal    ${response_body}[id]                ${{int($id)}}
@@ -71,7 +74,8 @@ Put pet
     Should Be Equal    ${response_body}[name]              ${name}                                             
     Should Be Equal    ${response_body}[tags][0][id]       ${{int(${tag}[id])}}
     Should Be Equal    ${response_body}[tags][0][name]     ${tag}[name]    
-    Should Be Equal    ${response_body}[status]            sold        # valor fixo     
+                                                           # sold = valor fixo 
+    Should Be Equal    ${response_body}[status]            sold             
     Should Be Equal    ${response_body}[status]            ${body}[status]    # compara o valor que está no arquivo
 
 
